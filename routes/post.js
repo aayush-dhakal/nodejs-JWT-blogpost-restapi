@@ -20,7 +20,7 @@ router.post('/', auth, async (req, res) => {
 // get all posts without authentication
 router.get('/', async (req, res) => {
     try {
-        const posts = await Post.find({})
+        const posts = await Post.find({}).sort({'updatedAt': -1})
         res.send(posts)
     } catch (error) {
         res.status(500).send()
@@ -36,6 +36,7 @@ router.get('/all', auth, async (req, res) => {
         // or
         // basically populating(adding) the virtual posts field with the authorized user's posts
         await req.user.populate('posts').execPopulate()
+
         res.send(req.user.posts)
 
     } catch (error) {
